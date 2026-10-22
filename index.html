@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fun Name Label Maker</title>
+<style>
+:root{--ink:#25304a;--accent:#ff62ad;--paper:#fff}
+*{box-sizing:border-box}
+body{margin:0;background:#f5f7ff;color:var(--ink);font-family:Arial,Helvetica,sans-serif}
+header{padding:22px 18px 14px;text-align:center;background:linear-gradient(120deg,#ffdcf0,#dff4ff,#fff1bb)}
+h1{margin:0 0 7px;font-size:clamp(25px,4vw,38px)}
+header p{margin:0;color:#526079}
+main{max-width:1200px;margin:18px auto;padding:0 16px 28px}
+.panel{background:#fff;border:1px solid #e2e7f3;border-radius:20px;padding:18px;box-shadow:0 5px 20px #26355b0c}
+.controls{display:grid;grid-template-columns:repeat(4,minmax(150px,1fr));gap:14px}
+.field{display:flex;flex-direction:column;gap:7px}
+label{font-size:13px;font-weight:800;color:#53617a}
+input,select{width:100%;padding:12px;border:1px solid #ccd5e6;border-radius:11px;background:white;color:#26334d;font-size:16px}
+input[type=color]{height:44px;padding:4px}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+button{border:0;border-radius:12px;padding:12px 17px;font-size:15px;font-weight:800;cursor:pointer}
+.primary{background:#293a69;color:white}.secondary{background:#edf0fa;color:#293a69}
+.note{font-size:13px;color:#65718a;margin:13px 0 0}
+.preview-head{display:flex;justify-content:space-between;gap:12px;align-items:center;margin:20px 2px 12px;flex-wrap:wrap}
+.preview-head h2{font-size:19px;margin:0}
+#sheet{background:white;padding:10mm;display:grid;gap:3mm;border:1px solid #e2e7f3;border-radius:14px;box-shadow:0 5px 20px #26355b0c}
+.label-card{min-width:0;min-height:0;display:flex;align-items:center;gap:8px;padding:7px 8px;border:3px solid var(--c);border-radius:13px;background:var(--bg);overflow:hidden;break-inside:avoid}
+.picture{flex:0 0 27%;display:flex;align-items:center;justify-content:center;font-size:clamp(19px,3vw,37px);line-height:1}
+.name-area{background:#fff;flex:1;min-width:0;border-radius:9px;padding:5px 6px;display:flex;align-items:center;justify-content:center;min-height:35px;overflow:hidden;text-align:center}
+.name{font-family:Arial,Helvetica,sans-serif;font-weight:900;font-size:clamp(15px,2vw,25px);overflow-wrap:anywhere;line-height:1.05;text-align:center;width:100%}
+.sub{display:none;font-size:9px;color:#71809b}
+.label-card.no-pic .picture{display:none}
+.label-card.no-pic .name-area{margin-left:0}
+#sheet[data-cols="2"] .name{font-size:clamp(20px,3vw,32px)}
+#sheet[data-cols="3"] .name{font-size:clamp(18px,2.5vw,29px)}
+#sheet[data-cols="4"] .name{font-size:clamp(16px,2vw,25px)}
+#sheet[data-cols="5"] .name{font-size:clamp(14px,1.7vw,21px)}
+footer{text-align:center;color:#7a8498;font-size:12px;padding:12px}
+@media(max-width:800px){.controls{grid-template-columns:repeat(2,minmax(0,1fr))}#sheet{padding:5mm;gap:2mm}.label-card{padding:4px;gap:4px;border-width:2px}.picture{font-size:22px}}
+@media(max-width:430px){.controls{grid-template-columns:1fr 1fr}.panel{padding:12px}}
+@page{size:A4 portrait;margin:0}
+@media print{
+ html,body{width:210mm;height:297mm;margin:0!important;padding:0!important;background:white;overflow:hidden}
+ header,.panel,.preview-head,footer{display:none!important}
+ main{width:210mm;height:297mm;max-width:none;margin:0;padding:0}
+ #sheet{width:210mm;height:297mm;padding:8mm;gap:2mm;border:0;border-radius:0;box-shadow:none;box-sizing:border-box;overflow:hidden;grid-template-rows:repeat(var(--rows),minmax(0,1fr))}
+ .label-card{min-height:0;border-radius:3mm;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+ .name{color:#17213b}
+}
+</style>
+</head>
+<body>
+<header>
+  <h1>🌈 Fun Name Label Maker</h1>
+  <p>Type once. Create a whole sheet. Print and stick!</p>
+</header>
+<main>
+<section class="panel">
+<div class="controls">
+  <div class="field"><label for="studentName">NAME ON EVERY LABEL</label><input id="studentName" value="Venus" placeholder="Type a name"></div>
+  <div class="field"><label for="fontChoice">FONT STYLE</label><select id="fontChoice"><option value="Arial, Helvetica, sans-serif">Modern Bold</option><option value="Trebuchet MS, sans-serif">Friendly Rounded</option><option value="Georgia, serif">Classic Serif</option><option value="Courier New, monospace">Typewriter</option><option value="Impact, Haettenschweiler, sans-serif">Extra Bold</option><option value="Verdana, sans-serif">Clear & Simple</option><option value="cursive">Playful Handwriting</option></select></div>
+  <div class="field"><label for="theme">DESIGN THEME</label><select id="theme">
+    <option value="mix">Colorful Mix</option><option value="sports">Sports</option><option value="stationery">Stationery & Art</option><option value="animals">Cute Animals</option><option value="space">Space & Science</option><option value="rainbow">Rainbows & Stars</option>
+  </select></div>
+  <div class="field"><label for="cols">COLUMNS</label><select id="cols"><option>2</option><option>3</option><option selected>4</option><option>5</option></select></div>
+  <div class="field"><label for="rows">ROWS</label><select id="rows"><option>4</option><option>6</option><option selected>8</option><option>10</option><option>12</option></select></div>
+  <div class="field"><label for="shape">LABEL SHAPE</label><select id="shape"><option value="rounded">Rounded corners</option><option value="square">Square corners</option><option value="pill">Pill shape</option></select></div>
+  <div class="field"><label for="pictureMode">PICTURES</label><select id="pictureMode"><option value="each">Different picture on each label</option><option value="same">Same picture on every label</option><option value="none">No pictures</option></select></div>
+  <div class="field"><label for="sameIcon">CHOOSE ONE PICTURE (optional)</label><select id="sameIcon"><option>⭐</option><option>⚽</option><option>🏀</option><option>🎾</option><option>🏸</option><option>🏊</option><option>🎨</option><option>✏️</option><option>📚</option><option>✂️</option><option>🦄</option><option>🐱</option><option>🦖</option><option>🚀</option><option>🌈</option></select></div>
+  <div class="field"><label for="borderColor">CUSTOM BORDER COLOR</label><input type="color" id="borderColor" value="#ff65b3"></div>
+</div>
+<div class="actions">
+  <button class="primary" id="printBtn">🖨️ Print / Save as PDF</button>
+  <button class="secondary" id="refreshBtn">✨ Shuffle Designs</button>
+  <button class="secondary" id="downloadBtn">⬇ Download HTML</button>
+</div>
+<p class="note">Print tip: choose A4 paper and “Actual size” or 100% scale. For best results, use sticker paper. The preview uses the selected rows × columns.</p>
+</section>
+<div class="preview-head"><h2>Print preview</h2><span id="count">32 labels · 4 columns × 8 rows</span></div>
+<div id="sheet" data-cols="4" aria-label="Label sheet"></div>
+<footer>Made for school supplies, books, bottles, pencil cases and sports gear.</footer>
+</main>
+<script>
+const themes={
+ sports:['⚽','🏀','🎾','🏸','🏊','🏆','🏓','🏐','🚴','🛼','🥇','🏈'],
+ stationery:['✏️','🖍️','🎨','📚','✂️','🖊️','📏','🖌️','📒','🖇️','🎒','🧮'],
+ animals:['🦄','🐱','🐼','🦖','🐰','🐸','🦊','🐨','🐳','🦋','🐢','🐻'],
+ space:['🚀','🪐','⭐','🌙','👽','🛸','☄️','🌍','🔭','🛰️','🌟','🧪'],
+ rainbow:['🌈','⭐','💖','🌸','☀️','🦄','🎀','🫧','🌼','🦋','🍓','☁️'],
+ mix:['🦄','⚽','🏀','🛼','🦖','🎨','🏈','✏️','🏊','🚗','🏸','🐘','📚','🏐','🎾','🎒','🐱','🖍️','⚽','🧴','☀️','🥽','🏈','✂️','👟','🐼','🚲','🛹','👑','🖍️','🏆','⭐']
+};
+const colors=[['#ff65b3','#fff0f8'],['#25b9f4','#e8f8ff'],['#ffd93f','#fff9d7'],['#a58bff','#f3efff'],['#55d98a','#eafff1'],['#35c8c7','#e6fffd'],['#ff9b63','#fff0e5'],['#8bdc50','#f3ffe8']];
+const $=id=>document.getElementById(id);
+function draw(){
+ const name=$('studentName').value.trim()||'Your Name';
+ const cols=+$('cols').value, rows=+$('rows').value, total=cols*rows;
+ const theme=$('theme').value, mode=$('pictureMode').value, chosen=$('sameIcon').value;
+ const sheet=$('sheet'); sheet.innerHTML=''; sheet.dataset.cols=cols;
+ sheet.style.setProperty('--rows', rows);
+ sheet.style.gridTemplateColumns=`repeat(${cols},minmax(0,1fr))`;
+ sheet.style.gridTemplateRows=`repeat(${rows},minmax(0,1fr))`;
+ $('count').textContent=`${total} labels · ${cols} columns × ${rows} rows`;
+ let icons=themes[theme]||themes.mix;
+ for(let i=0;i<total;i++){
+  let icon=mode==='none'?'':mode==='same'?chosen:icons[i%icons.length];
+  let palette=colors[i%colors.length];
+  let card=document.createElement('div');card.className='label-card'+(!icon?' no-pic':'');
+  let shape=$('shape').value;card.style.borderRadius=shape==='square'?'3px':shape==='pill'?'999px':'13px';
+  card.style.setProperty('--c',$('borderColor').value||palette[0]);
+  card.style.setProperty('--bg',palette[1]);
+  card.innerHTML=`<div class="picture" aria-hidden="true"></div><div class="name-area"><div class="name"></div></div>`;
+  card.querySelector('.picture').textContent=icon;
+  const nameEl=card.querySelector('.name');
+  nameEl.textContent=name;
+  nameEl.style.fontFamily=$('fontChoice').value;
+  sheet.appendChild(card);
+ }
+}
+['studentName','fontChoice','theme','cols','rows','shape','pictureMode','sameIcon','borderColor'].forEach(id=>$(id).addEventListener('input',draw));
+$('refreshBtn').addEventListener('click',()=>{
+ const theme=$('theme').value;
+ if(theme==='mix') themes.mix.sort(()=>Math.random()-.5);
+ else themes[theme].sort(()=>Math.random()-.5);
+ draw();
+});
+$('printBtn').addEventListener('click',()=>window.print());
+$('downloadBtn').addEventListener('click',()=>{
+ const blob=new Blob(['<!DOCTYPE html>\\n'+document.documentElement.outerHTML],{type:'text/html'});
+ const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='fun-name-label-maker.html';a.click();URL.revokeObjectURL(a.href);
+});
+draw();
+</script>
+</body>
+</html>
